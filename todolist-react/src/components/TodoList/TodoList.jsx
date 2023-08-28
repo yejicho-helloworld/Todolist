@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import AddTodo from "../AddTodo/AddTodo";
 import Todo from "../Todo/Todo";
+import styles from "./TodoList.module.css";
 
 // 상위 컴포넌트에서 prop으로 전달받는게 아니라, 하위 컴포넌트로 넘겨주는 것!
-export default function TodoList() {
+export default function TodoList({ filter }) {
   const [todos, setTodos] = useState([
     { id: "123", text: "장보기", status: "active" },
     { id: "124", text: "밥먹기", status: "active" },
@@ -16,15 +17,18 @@ export default function TodoList() {
   // handleDelete는 setTodos를 할 때 배열을 빙글빙글 돌면서 id가 삭제하고자하는
   // id가 아닌 것들만 모아서 setTodos를 해주었음.
   const handleDelete = (deleted) =>
-    setTodos(todos.map((todo) => todo.id !== deleted.id));
+    setTodos(todos.filter((todo) => todo.id !== deleted.id));
   // todo!!!!를 받아와야함. 객체를 '''배열'''안에 담아줘야함.
+  const filtered = getFilteredItems(todos, filter);
+  // 그래서 filtered에는 우리가 선택한 filter에 해당하는 투두만 들어잇음.
+  // 그래서 투두 대신에 filter된 것들만 map할 수 있도록 만들면 됨.
   return (
-    <section>
-      <ul>
+    <section className={styles.container}>
+      <ul className={styles.list}>
         {/* li 대신에 todo라는 컴포넌트를 씀. 그리고 Text를 
 children으로 보내주는 todo에 item 자체를 전달하고, 아이템이 update되었을 때
 호출해야하는 callback 함수도 전달해줌 prop으로! */}
-        {todos.map((item) => (
+        {filtered.map((item) => (
           <Todo
             key={item.id}
             todo={item}
@@ -41,3 +45,21 @@ children으로 보내주는 todo에 item 자체를 전달하고, 아이템이 up
     </section>
   );
 }
+
+function getFilteredItems(todos, filter) {
+  if (filter === "all") {
+    return todos;
+  } else {
+    return todos.filter((todo) => todo.status === filter);
+  }
+}
+// function getFilteredItems는 현재 todos배열과 어떤 것을 filter해야
+// 하는지 데이터를 받아옴. 만약 filter가 all이라면, 전부 다 보여주는 것이라면
+// 우리가 별도로 filter할 필요가 없기 때문에 todos를 다 return하고,
+// 만약 filter가 all이 아닌 경우에는 todos의 filter를 이용해서 각각
+// todo를 받아와서 todo의 status가 filter에 해당하는 것만 filtering해줌.
+
+// todolsit에서 filter를 prop으로 받아, 선택된 filter를 통해서 해당하는
+// 요소만 보여줌. 그러면 밑에서 전체의 todo를 보여주는 것이 아니라, 우리가 const에
+// Filtered된 item을 받아와서 filtered를 받아오도록 만듦.
+//
