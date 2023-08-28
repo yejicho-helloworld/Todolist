@@ -4,14 +4,15 @@
   --color-grey: #d1d1d1;
   --color-text: #22243b;
   --color-accent: #f16e03;
-  background: rgb(81, 87, 111);
-  background: linear-gradient(
-    106deg,
-    rgba(81, 87, 111, 1) 0%,
-    rgba(60, 61, 69, 1) 100%
-  );
   --color-white: white;
   --color-scrollbar: #aaa7a7;
+}
+
+html.dark {
+  --color-bg-dark: #1a1c35;
+  --color-bg: #22243b;
+  --color-grey: #4e4e4e;
+  --color-text: #fdfffd;
 }
 
 #root {
@@ -68,6 +69,6 @@ ul {
   /* 리스트의 기본 style을 없앰 */
 }
 
-*{
+* {
   box-sizing: border-box;
 }
